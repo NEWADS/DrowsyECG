@@ -28,10 +28,10 @@ if not os.path.exists("./dataset/Specgrams/0"):
 if not os.path.exists("./dataset/Specgrams/-1"):
     os.makedirs("./dataset/Specgrams/-1")
 
-dirs = "./dataset/Analysed/"
+dirs = "./dataset/Analysed-original/"
 
 nfft = 512
-fs = 512
+fs = 1000  # keep same as matlab
 
 
 def main_true():
@@ -40,7 +40,7 @@ def main_true():
     for i in range(1, 15):
         val = "{}-1".format(i)
         try:
-            data = np.load("{}analysed-{}.npy".format(dirs, val))
+            data = np.load("{}original-{}.npy".format(dirs, val))
         except IOError:
             print("{} doesn't exist.".format(val))
             continue
@@ -52,7 +52,7 @@ def main_true():
                 ax = fig.add_subplot(1, 1, 1)
                 # spectrogram param keeps the same to Matlab. (include the window if using hamming)
                 plt.axis("off")
-                plt.specgram(y, NFFT=nfft, Fs=fs, noverlap=int(fs*(475/512)), window=np.hamming(fs))
+                plt.specgram(y, NFFT=nfft, Fs=fs, noverlap=475, window=np.hamming(512))
                 extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
                 # save fig without the white border.
                 plt.savefig("./dataset/Specgrams/1/{}.png".format(num), bbox_inches=extent)
@@ -67,7 +67,7 @@ def main_false():
     for t in range(1, 15):
         val = "{}-3".format(t)
         try:
-            data = np.load("{}analysed-{}.npy".format(dirs, val))
+            data = np.load("{}original-{}.npy".format(dirs, val))
         except IOError:
             print("{} doesn't exist.".format(val))
             continue
@@ -79,7 +79,7 @@ def main_false():
                 ax = fig.add_subplot(1, 1, 1)
                 # spectrogram param keeps the same to Matlab. (include the window if using hamming)
                 plt.axis("off")
-                plt.specgram(y, NFFT=nfft, Fs=fs, noverlap=int(fs * (475 / 512)), window=np.hamming(fs))
+                plt.specgram(y, NFFT=nfft, Fs=fs, noverlap=475, window=np.hamming(512))
                 extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
                 # save fig without the white border.
                 plt.savefig("./dataset/Specgrams/0/{}.png".format(num), bbox_inches=extent)
@@ -94,7 +94,7 @@ def main_unlabel():
     for x in range(1, 15):
         val = "{}-2".format(x)
         try:
-            data = np.load("{}analysed-{}.npy".format(dirs, val))
+            data = np.load("{}original-{}.npy".format(dirs, val))
         except IOError:
             print("{} doesn't exist.".format(val))
             continue
@@ -106,7 +106,7 @@ def main_unlabel():
                 ax = fig.add_subplot(1, 1, 1)
                 # spectrogram param keeps the same to Matlab. (include the window if using hamming)
                 plt.axis("off")
-                plt.specgram(y, NFFT=nfft, Fs=fs, noverlap=int(fs * (475 / 512)), window=np.hamming(fs))
+                plt.specgram(y, NFFT=nfft, Fs=fs, noverlap=475, window=np.hamming(512))
                 extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
                 # save fig without the white border.
                 plt.savefig("./dataset/Specgrams/-1/{}.png".format(num), bbox_inches=extent)

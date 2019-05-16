@@ -141,7 +141,7 @@ def main():
 
     if not os.path.exists('./dataset'):
         exit()
-    if not os.path.exists('./dataset/Filtered/'):
+    if not os.path.exists('./dataset/Filtered'):
         os.mkdir('./dataset/Filtered')
 
     for i in range(1, 15):

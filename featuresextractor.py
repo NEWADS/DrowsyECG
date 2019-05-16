@@ -81,11 +81,11 @@ def main():
                 if x == "Inception_V3":
                     img = image.load_img("{}/{}/{}".format(dirs, i, val),
                                          target_size=(299, 299),
-                                         interpolation="bicubic")
+                                         interpolation="bilinear")
                 else:
                     img = image.load_img("{}/{}/{}".format(dirs, i, val),
                                          target_size=(224, 224),
-                                         interpolation="bicubic")
+                                         interpolation="bilinear")
                 data = image.img_to_array(img)
                 data = np.expand_dims(data, axis=0)
                 data = preprocess_input(data)

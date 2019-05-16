@@ -46,5 +46,49 @@ def main():
                 print("{} finished & saved.".format(val))
 
 
+def remove_bad_signals():
+    # switch working folder to main path
+    wf = os.getcwd()
+    # print(wf)
+    if "preprocess" in wf:
+        os.chdir("../")
+    # print(os.getcwd())
+
+    dirs = "./dataset"
+
+    if not os.path.exists("./dataset/Analysed-original"):
+        os.makedirs("./dataset/Analysed-original")
+
+    # load missnum files...
+    for i in range(1, 15):
+        for j in range(1, 4):
+            val = "{}-{}".format(i, j)
+            try:
+                data = sio.loadmat("{}/Original/ECG{}_{}.mat".format(dirs, i, j))["ECG{}_{}".format(i, j)]
+            except IOError:
+                print("{} doesn't exist, skipped.".format(val))
+                continue
+            else:
+                try:
+                    y = np.load("{}/Missnum/missnum-{}.npy".format(dirs, val))
+                except IOError:
+                    print("All signal accepted in {}.".format(val))
+                    np.save("{}/Analysed-original/original-{}.npy".format(dirs, val), data)
+                    print("{} finished & converted.".format(val))
+                    continue
+                else:
+                    if (39 - len(y)) == len(data):
+                        print("in {}, unaccepted signals have been removed, skipped.".format(val))
+                        np.save("{}/Analysed-original/original-{}.npy".format(dirs, val), data)
+                        print("{} finished & converted.".format(val))
+                        continue
+                    print("num {} will be removed".format(y))
+                    data = np.delete(data, y, axis=0)
+                    print("new size: {}".format(data.shape))
+                    if data.shape[0] != 0:
+                        np.save("{}/Analysed-original/original-{}.npy".format(dirs, val), data)
+                    print("{} finished & converted.".format(val))
+
+
 if __name__ == "__main__":
-    main()
+    remove_bad_signals()

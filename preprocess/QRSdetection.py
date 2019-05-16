@@ -159,25 +159,46 @@ def adjust_threshold(i, ecg, ecg_filtered, r_peaks, ecg_integrate, tmp, freq=512
                                        "\n[2]: Need Lower Threshhold (miss R waves) " \
                                        "\n[3]: Need Higher Threshhold (miscount waves)" \
                                        "\n[0]: Noise. \n"
-        _res = int(input(_word))
+        _res = input(_word)
+        try:
+            _res = int(_res)
+        except ValueError:
+            _res = 4
+
         while _res != 1:
             if _res == 0:
                 # return noise sample
                 return 0, tmp
+
             elif _res == 2:
                 tmp = tmp / 1.5
                 _peaks = find_peak(ecg_integrate, int(freq/5), tmp)
                 _r_peaks = find_r_peaks(ecg_filtered, _peaks, int(freq/40))
                 plot_r_peaks(ecg, _r_peaks)
-                _res = int(input(_word))
+                _res = input(_word)
+                try:
+                    _res = int(_res)
+                except ValueError:
+                    _res = 4
+
             elif _res == 3:
                 tmp = tmp * 1.5
                 _peaks = find_peak(ecg_integrate, int(freq / 5), tmp)
                 _r_peaks = find_r_peaks(ecg_filtered, _peaks, int(freq / 40))
                 plot_r_peaks(ecg, _r_peaks)
-                _res = int(input(_word))
+                _res = input(_word)
+                try:
+                    _res = int(_res)
+                except ValueError:
+                    _res = 4
+
             else:
-                _res = int(input(_word))
+                _res = input(_word)
+                try:
+                    _res = int(_res)
+                except ValueError:
+                    _res = 4
+
         else:
             return 1, tmp
 
@@ -324,29 +345,29 @@ def main():
     # print(wf)
     if "preprocess" in wf:
         os.chdir("../")
-    if not os.path.exists("./dataset/analysed"):
-        os.makedirs("./dataset/analysed")
+    if not os.path.exists("./dataset/Analysed"):
+        os.makedirs("./dataset/Analysed")
 
-    if not os.path.exists("./dataset/missnum"):
-        os.makedirs("./dataset/missnum")
+    if not os.path.exists("./dataset/Missnum"):
+        os.makedirs("./dataset/Missnum")
 
-    if not os.path.exists("./dataset/rris"):
-        os.makedirs("./dataset/rris")
+    if not os.path.exists("./dataset/RRIs"):
+        os.makedirs("./dataset/RRIs")
 
     dirs = "./dataset"
     name = str(input("please entry the patient number:\n"))
     num = str(input("please entry the series number:\n"))
     val = "{}-{}".format(name, num)
     try:
-        os.remove('{}/missnums/missnum-{}.npy'.format(dirs, val))
-        os.remove('{}/analysed/analysed-{}.npy'.format(dirs, val))
-        os.remove('{}/rris/rr-{}.npy'.format(dirs, val))
+        os.remove('{}/Missnum/missnum-{}.npy'.format(dirs, val))
+        os.remove('{}/Analysed/analysed-{}.npy'.format(dirs, val))
+        os.remove('{}/RRIs/rr-{}.npy'.format(dirs, val))
     except IOError:
         print("{} cleaned".format(val))
     else:
         print("{} cleaned".format(val))
     try:
-        data = np.load("{}/filtered/filtered-{}.npy".format(dirs, val))
+        data = np.load("{}/Filtered/filtered-{}.npy".format(dirs, val))
     except IOError:
         print("File doesn't exist")
     else:
@@ -354,12 +375,12 @@ def main():
         # start quality analysis...
         resdict = rr_detection(data, switchauto=True)
         if resdict["status"] is 1 and len(resdict["rr_intervals"]) is not 0:
-            np.save("{}/rris/rr-{}".format(dirs, val), resdict['rr_intervals'])
-            np.save("{}/analysed/analysed-{}".format(dirs, val), resdict['ecgs'])
+            np.save("{}/RRIs/rr-{}".format(dirs, val), resdict['rr_intervals'])
+            np.save("{}/Analysed/analysed-{}".format(dirs, val), resdict['ecgs'])
             if len(resdict["ns"]) is not 0:
-                np.save("{}/missnum/missnum-{}".format(dirs, val), resdict['ns'])
+                np.save("{}/Missnum/missnum-{}".format(dirs, val), resdict['ns'])
         else:
-            np.save("{}/missnum/missnum-{}".format(dirs, val), range(39))  # missing num start with 0!
+            np.save("{}/Missnum/missnum-{}".format(dirs, val), range(39))  # missing num start with 0!
         print("{} finished & saved.".format(val))
 
 

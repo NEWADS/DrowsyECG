@@ -22,9 +22,11 @@ def main(c):
     # putting them together...
     feature1 = np.concatenate((hrv1, tf1), axis=1)
     # feature1 = hrv1
+    # feature1 = tf1
     y1 = np.ones(feature1.shape[0])
     feature0 = np.concatenate((hrv0, tf0), axis=1)
     # feature0 = hrv0
+    # feature0 = tf0
     y0 = np.zeros(feature0.shape[0])
     x = np.concatenate((feature1, feature0))
     y = np.concatenate((y1, y0))
@@ -32,12 +34,12 @@ def main(c):
     # shuffling dataset...
     np.random.seed(114)
     x, y = rm.shuffle(x, y)
-    cv = StratifiedKFold(n_splits=10)
+    cv = StratifiedKFold(n_splits=15)
 
     # creating classifier...
     # employing random forest
     # rfc = RFC(n_estimators=114)  # for test
-    rfc = RFC(n_estimators=10)  # For 16 demensions
+    rfc = RFC(n_estimators=1)  # For 16 demensions
     # svm
     svm = SVC(C=c, cache_size=200, class_weight=None,
               decision_function_shape='ovr', gamma=1.25e-05, kernel='rbf',
@@ -85,4 +87,4 @@ if __name__ == "__main__":
     main(c=5000)  # 16-d
     # for i in range(1000, 5000, 200):
     #     main(c=i)
-    # main(c = 1000)  # 8-d
+    # main(c=25)  # 8-d

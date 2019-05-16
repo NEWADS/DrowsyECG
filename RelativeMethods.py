@@ -71,6 +71,7 @@ def isomap(feature1, feature0):
     """
     drr_8 = Isomap(n_components=8)
     feature1 = drr_8.fit_transform(feature1)
+    drr_8 = Isomap(n_components=8)
     feature0 = drr_8.fit_transform(feature0)
     print("Isomap is finished. \nTrue dataset size: {}. \nFalse dataset size: {}.".format(feature1.shape, feature0.shape))
     return np.asarray(feature1), np.asarray(feature0)
