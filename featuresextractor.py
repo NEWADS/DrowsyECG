@@ -2,10 +2,10 @@ import tensorflow as tf
 import numpy as np
 import os
 import argparse
-from tensorflow.python.keras.applications import VGG16
-from tensorflow.python.keras.applications import InceptionV3
-from tensorflow.python.keras.preprocessing import image
-from tensorflow.python.keras.applications.inception_v3 import preprocess_input
+from keras.applications import VGG16
+from keras.applications import InceptionV3
+from keras.preprocessing import image
+from keras.applications.inception_v3 import preprocess_input
 
 parser = argparse.ArgumentParser(description="transfer learning feature extraction model for this project")
 parser.add_argument("--model", required=True, type=int, choices=[0, 1], metavar="MODEL",
@@ -77,7 +77,7 @@ def main():
     # get features...
     for i in range(-1, 2):
         for val in os.listdir("{}/{}".format(dirs, i)):
-            if ".png" in val:
+            if ".bmp" in val:
                 if x == "Inception_V3":
                     img = image.load_img("{}/{}/{}".format(dirs, i, val),
                                          target_size=(299, 299),

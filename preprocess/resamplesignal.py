@@ -60,6 +60,8 @@ def remove_bad_signals():
         os.makedirs("./dataset/Analysed-original")
 
     # load missnum files...
+    ecg0 = []
+    ecg1 = []
     for i in range(1, 15):
         for j in range(1, 4):
             val = "{}-{}".format(i, j)
@@ -74,12 +76,28 @@ def remove_bad_signals():
                 except IOError:
                     print("All signal accepted in {}.".format(val))
                     np.save("{}/Analysed-original/original-{}.npy".format(dirs, val), data)
+                    if j == 1 and len(ecg1) == 0:
+                        ecg1 = data
+                    elif j == 1 and len(ecg1) != 0:
+                        ecg1 = np.append(ecg1, data, axis=0)
+                    elif j == 3 and len(ecg0) == 0:
+                        ecg0 = data
+                    elif j == 3 and len(ecg0) != 0:
+                        ecg0 = np.append(ecg0, data, axis=0)
                     print("{} finished & converted.".format(val))
                     continue
                 else:
                     if (39 - len(y)) == len(data):
                         print("in {}, unaccepted signals have been removed, skipped.".format(val))
                         np.save("{}/Analysed-original/original-{}.npy".format(dirs, val), data)
+                        if j == 1 and len(ecg1) == 0:
+                            ecg1 = data
+                        elif j == 1 and len(ecg1) != 0:
+                            ecg1 = np.append(ecg1, data, axis=0)
+                        elif j == 3 and len(ecg0) == 0:
+                            ecg0 = data
+                        elif j == 3 and len(ecg0) != 0:
+                            ecg0 = np.append(ecg0, data, axis=0)
                         print("{} finished & converted.".format(val))
                         continue
                     print("num {} will be removed".format(y))
@@ -87,7 +105,18 @@ def remove_bad_signals():
                     print("new size: {}".format(data.shape))
                     if data.shape[0] != 0:
                         np.save("{}/Analysed-original/original-{}.npy".format(dirs, val), data)
+                        if j == 1 and len(ecg1) == 0:
+                            ecg1 = data
+                        elif j == 1 and len(ecg1) != 0:
+                            ecg1 = np.append(ecg1, data, axis=0)
+                        elif j == 3 and len(ecg0) == 0:
+                            ecg0 = data
+                        elif j == 3 and len(ecg0) != 0:
+                            ecg0 = np.append(ecg0, data, axis=0)
                     print("{} finished & converted.".format(val))
+    # saving mat for specgram function in matlab...
+    sio.savemat("{}/Analysed-original/ECG1.mat".format(dirs), {"ECG1": ecg1})
+    sio.savemat("{}/Analysed-original/ECG0.mat".format(dirs), {"ECG0": ecg0})
 
 
 if __name__ == "__main__":

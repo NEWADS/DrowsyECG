@@ -34,12 +34,12 @@ def main(c):
     # shuffling dataset...
     np.random.seed(114)
     x, y = rm.shuffle(x, y)
-    cv = StratifiedKFold(n_splits=15)
+    cv = StratifiedKFold(n_splits=5)
 
     # creating classifier...
     # employing random forest
     # rfc = RFC(n_estimators=114)  # for test
-    rfc = RFC(n_estimators=1)  # For 16 demensions
+    rfc = RFC(n_estimators=10)  # For 16 demensions
     # svm
     svm = SVC(C=c, cache_size=200, class_weight=None,
               decision_function_shape='ovr', gamma=1.25e-05, kernel='rbf',
@@ -84,7 +84,7 @@ def main(c):
 
 
 if __name__ == "__main__":
-    main(c=5000)  # 16-d
+    # main(c=5000)  # 16-d
     # for i in range(1000, 5000, 200):
     #     main(c=i)
-    # main(c=25)  # 8-d
+    main(c=25)  # 8-d
