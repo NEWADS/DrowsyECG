@@ -77,7 +77,8 @@ def main():
     # get features...
     for i in range(-1, 2):
         for val in os.listdir("{}/{}".format(dirs, i)):
-            if ".bmp" in val:
+            # if ".bmp" in val:
+            if ".png" in val:
                 if x == "Inception_V3":
                     img = image.load_img("{}/{}/{}".format(dirs, i, val),
                                          target_size=(299, 299),
